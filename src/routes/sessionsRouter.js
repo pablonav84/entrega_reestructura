@@ -7,7 +7,7 @@ import { config } from '../config/config.js';
 
 export const router=Router()
 
-router.get('/current', passportCall("current"), auth(["usuario"]), async(req,res)=>{
+router.get('/current', passportCall("jwt"), auth(["usuario"]), async(req,res)=>{
     
   try {
         let usuario = await
@@ -44,7 +44,7 @@ router.post('/login', passportCall("login"), async(req,res)=>{
     usuario={...usuario}
     delete usuario.password
 
-    let token=jwt.sign(usuario, config.SECRET, {expiresIn:20})
+    let token=jwt.sign(usuario, config.SECRET, {expiresIn:"1h"})
 
     res.cookie("coderCookie", token, {maxAge: 1000*60*60, signed:true, httpOnly: true})
     

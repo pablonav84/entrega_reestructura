@@ -18,6 +18,8 @@
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "mongoose": "^8.3.4",
+    "mongoose-paginate": "^5.0.3",
+    "mongoose-paginate-v2": "^1.8.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0"

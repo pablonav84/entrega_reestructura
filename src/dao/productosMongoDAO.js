@@ -11,7 +11,7 @@ async getProductById(id){
   return await productsModelo.findById(id).lean()
 }
 async getProductByCode(code){
-  return await productsModelo.findOne({code}).lean()
+  return await productsModelo.findOne(code).lean()
 }
 async getProductBy(filtro){
   return await productsModelo.findOne(filtro).lean()

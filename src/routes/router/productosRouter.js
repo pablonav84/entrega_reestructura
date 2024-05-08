@@ -8,8 +8,9 @@ const productsManager=new ProductsManager()
 
 export class ProductosRouter extends CustomRouter{
     init(){
-        this.get("/", passportCall("current"), auth(["usuario"]), ProductosController.getProductos)
-
+        this.get("/", passportCall("jwt"), auth(["usuario"]), ProductosController.getProductos)
+        this.get("/:id", passportCall("jwt"), auth(["usuario"]), ProductosController.getProductoById)
+        this.post("/", passportCall("jwt"), auth(["usuario"]), ProductosController.newProducto);
         
     }
 }

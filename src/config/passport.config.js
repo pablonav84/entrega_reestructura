@@ -23,7 +23,7 @@ export const initPassport=()=>{
     const manager = new UsuariosManager();
 
     passport.use(
-        "current",
+        "jwt",
         new passportjwt.Strategy(
             {
                 secretOrKey: config.SECRET,
