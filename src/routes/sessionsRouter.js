@@ -4,6 +4,7 @@ import { passportCall } from '../utils.js';
 import { usuarioModelo } from '../dao/models/usuariosModelo.js';
 import { auth } from '../middleware/auth.js';
 import { config } from '../config/config.js';
+import passport from 'passport';
 
 export const router=Router()
 
@@ -34,9 +35,9 @@ router.get("/usuarios", async(req, res)=>{
 })
 
 router.post("/registro", passportCall("registro"), (req, res)=>{
-
+let usuario=req.user
     res.setHeader('Content-Type','application/json');
-    return res.status(201).json({status:"registro correcto", usuario:req.user});
+    return res.status(201).json({status:"registro correcto", usuario});
 })
 
 router.post('/login', passportCall("login"), async(req,res)=>{
@@ -53,3 +54,17 @@ router.post('/login', passportCall("login"), async(req,res)=>{
         message:"Login correcto", usuario
     })
 });
+
+router.get('/github', passportCall("github"), (req,res)=>{})
+
+router.get('/callbackGithub', passport.authenticate("github", {failureRedirect:"/api/sessions/errorGitHub"}), (req,res)=>{
+
+  // obtengo un req.user que puedo devolver como dato
+
+  req.session.usuario=req.user
+  res.setHeader('Content-Type','application/json');
+  return res.status(200).json({
+      payload:"Login correcto", 
+      usuario:req.user
+  });
+})

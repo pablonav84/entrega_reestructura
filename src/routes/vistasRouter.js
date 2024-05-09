@@ -66,3 +66,8 @@ router.get("/productos/:id", async (req, res) => {
   res.setHeader("Content-Type", "text/html");
   return res.status(200).render("detailProducts", { product });
 });
+
+router.get("/registro", (req, res) => {
+
+  return res.status(200).render("registro");
+})

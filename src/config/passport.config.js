@@ -8,7 +8,7 @@ import { usuarioModelo } from "../dao/models/usuariosModelo.js"
 import { UsuariosManager } from "../dao/usuariosMongoDAO.js"
 import { Cart } from "../dao/models/cartModelo.js"
 import { config } from "./config.js"
-
+import github from "passport-github2"
 
 const buscaToken=(req)=>{
     let token=null
@@ -38,6 +38,38 @@ export const initPassport=()=>{
             }
         )
     )
+
+    passport.use(
+        "github",
+        new github.Strategy(
+            {
+                clientID:"Iv1.456520ac1405607b",
+                clientSecret:"f5a51c2c06bef393f99b4372f5b497a82fd76a76",
+                callbackURL:"http://localhost:8080/api/sessions/callbackGithub",
+            },
+            async function(accessToken, refreshToken, profile, done){
+                try {
+                     let nombre=profile._json.name
+                    let email=profile._json.email
+                    if(!email){
+                        return done(null, false)
+                    }
+                    let usuario= await usuariosModelo.findOne({email})
+                    if(!usuario){
+                        usuario=await usuariosModelo.create({
+                            nombre, email, 
+                            profileGithub: profile
+                        })
+                    }
+
+                    return done(null, usuario)
+                } catch (error) {
+                    return done(error)
+                }
+            }
+        )
+    )
+
     passport.use(
         "registro",
         new local.Strategy(
@@ -84,7 +116,7 @@ export const initPassport=()=>{
                     return done(null, usuario)
 
                 } catch (error) {
-                    return done(error)
+                    return done(error, false, {message:"error al crear registro"})
                 }
             }
         )
@@ -97,9 +129,10 @@ export const initPassport=()=>{
             usernameField: "email"
           },
           async (username, password, done) => {
-            if (!username || !password) {
-              return done(null, false);
-            }
+            if (!{email:username} || !password) {
+                let error = "Por favor, ingresa el nombre de usuario y la contraseña";
+                return done(null, false, { message: error });
+              }
             try {
               let usuario = await manager.getBy({ email: username });
               
@@ -113,6 +146,7 @@ export const initPassport=()=>{
               }
               return done(null, usuario);
             } catch (error) {
+                console.log({error})
               return done(error, false, { message: "Error al autenticar el usuario" });
             }
           }

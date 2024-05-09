@@ -8,6 +8,8 @@ form {
   
   /* Estilos de los campos de entrada */
   input[type="email"],
+  input[type="text"],
+  input[type="number"],
   input[type="password"] {
     width: 300px;
     padding: 10px;
