@@ -54,9 +54,9 @@ export const initPassport=()=>{
                     if(!email){
                         return done(null, false)
                     }
-                    let usuario= await usuariosModelo.findOne({email})
+                    let usuario= await usuarioModelo.findOne({email})
                     if(!usuario){
-                        usuario=await usuariosModelo.create({
+                        usuario=await usuarioModelo.create({
                             nombre, email, 
                             profileGithub: profile
                         })
@@ -146,7 +146,6 @@ export const initPassport=()=>{
               }
               return done(null, usuario);
             } catch (error) {
-                console.log({error})
               return done(error, false, { message: "Error al autenticar el usuario" });
             }
           }

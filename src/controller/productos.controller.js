@@ -1,14 +1,13 @@
 import { isValidObjectId } from "mongoose"
-import { ProductsManager as ProductosDAO } from "../dao/productosMongoDAO.js"
 import { generaHash } from "../utils.js"
+import { productosService } from "../services/productos.service.js"
 
-const productosDAO=new ProductosDAO()
 
 export default class ProductosController{
 
     static getProductos=async(req,res)=>{
 
-        let productos=await productosDAO.getAll()
+        let productos=await productosService.getAllProductos()
 
         res.setHeader('Content-Type','application/json')
         res.status(200).json({productos})
@@ -22,7 +21,7 @@ export default class ProductosController{
             return res.status(400).json({error:`Ingrese un id de MongoDB válido`})
         }
 
-        let producto=await productosDAO.getProductById({_id:id})
+        let producto=await productosService.getProductoBy({_id:id})
 
         if (!producto) {
             res.setHeader('Content-Type', 'application/json');
@@ -58,14 +57,14 @@ export default class ProductosController{
           return;
         }
         // Verificar si el código ya existe
-        let existCode = await productosDAO.getProductByCode({code});
+        let existCode = await productosService.getProductoBy({code});
         if (existCode) {
           res.status(400).json({ error: "Ya existe un producto con el mismo código" });
           return;
         }
         password = generaHash(password);
         try {
-          let nuevoProducto = await productosDAO.addProduct({
+          let nuevoProducto = await productosService.crearProducto({
             title,
             description,
             price,

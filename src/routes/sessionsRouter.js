@@ -41,30 +41,53 @@ let usuario=req.user
 })
 
 router.post('/login', passportCall("login"), async(req,res)=>{
-    let usuario=req.user
-    usuario={...usuario}
-    delete usuario.password
+  try {
+    let usuario=req.user;
+    usuario={...usuario};
+    delete usuario.password;
 
-    let token=jwt.sign(usuario, config.SECRET, {expiresIn:"1h"})
+    let token=jwt.sign(usuario, config.SECRET, {expiresIn:"1h"});
 
-    res.cookie("coderCookie", token, {maxAge: 1000*60*60, signed:true, httpOnly: true})
-    
-    res.setHeader('Content-Type','application/json')
+    res.cookie("coderCookie", token, {maxAge: 1000*60*60, signed:true, httpOnly: true});
+
+    res.setHeader('Content-Type','application/json');
     res.status(200).json({
         message:"Login correcto", usuario
-    })
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Error al realizar el login' });
+  }
 });
 
+router.get('/logout', (req, res) => {
+  
+  // Elimina la cookie de autenticación
+  res.clearCookie('coderCookie');
+
+  // Envía una respuesta al cliente
+  res.send('<script>alert("Logout exitoso"); window.location.href="/?mensaje=Logout exitoso";</script>');
+});
+
+//Login con Github
 router.get('/github', passportCall("github"), (req,res)=>{})
 
-router.get('/callbackGithub', passport.authenticate("github", {failureRedirect:"/api/sessions/errorGitHub"}), (req,res)=>{
+router.get('/callbackGithub', passportCall("github", {failureRedirect:"/api/sessions/errorGitHub"}), (req,res)=>{
 
-  // obtengo un req.user que puedo devolver como dato
-
-  req.session.usuario=req.user
+  req.usuario=req.user
   res.setHeader('Content-Type','application/json');
   return res.status(200).json({
       payload:"Login correcto", 
       usuario:req.user
   });
+})
+
+router.get("/errorGitHub", (req, res)=>{
+  res.setHeader('Content-Type','application/json');
+  return res.status(500).json(
+      {
+          error:`Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+          detalle:`Fallo al autenticar con GitHub`
+      }
+  )
 })

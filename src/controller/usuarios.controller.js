@@ -1,13 +1,13 @@
 import { isValidObjectId } from "mongoose"
-import { UsuariosManager as UsuariosDAO } from "../dao/usuariosMongoDAO.js"
+import { usuariosService } from "../services/usuarios.service.js"
 
-const usuariosDAO=new UsuariosDAO()
 
 export default class UsuariosController{
 
     static getUsuarios=async(req,res)=>{
 
-        let usuarios=await usuariosDAO.getAll()
+        let usuarios=await usuariosService.getAllUsuarios()
+        //let usuarios=await usuariosDAO.getAll()
 
         res.setHeader('Content-Type','application/json')
         res.status(200).json({usuarios})
@@ -21,7 +21,12 @@ export default class UsuariosController{
             return res.status(400).json({error:`Ingrese un id de MongoDB válido`})
         }
 
-        let usuario=await usuariosDAO.getBy({_id:id})
+        let usuario=await usuariosService.getUsuarioById({_id:id})
+
+        if(!usuario){
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(404).json({ error: `El ID ingresado no corresponde a un usuario existente` });
+        }
 
         res.setHeader('Content-Type','application/json')
         res.status(200).json({usuario})
@@ -36,7 +41,7 @@ export default class UsuariosController{
 
         let existe
         try {
-            existe = await usuariosDAO.getOneBy({email})
+            existe = await usuariosService.getUsuarioByEmail({email})
         } catch (error) {
             console.log(error);
             res.setHeader('Content-Type','application/json');
@@ -55,7 +60,7 @@ export default class UsuariosController{
         // resto de validaciones aquí SIEMPRE en CONTROLLER...!!!
 
         try {
-            let nuevoUsuario=await usuariosDAO.create({nombre, email})
+            let nuevoUsuario=await usuariosService.crearUsuario({nombre, email})
             res.setHeader('Content-Type','application/json');
             return res.status(200).json({nuevoUsuario});            
         } catch (error) {

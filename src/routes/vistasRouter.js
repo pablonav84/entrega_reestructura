@@ -11,11 +11,16 @@ router.get('/', (req, res) => {
 })
 
 router.get('/home', passportCall("jwt", {session:false}), async (req,res)=>{
-    
+  try {
     const rol = await rolModelo.findById(req.user.rol);
 
-    res.status(200).render('home', {usuario: req.user, rol:rol.descrip})
-})
+    res.status(200).render('home', {usuario: req.user, rol:rol.descrip});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Error al cargar la página de inicio' });
+  }
+});
+
 
 router.get("/productos", async (req, res) => {
   let { pagina, limit, sort } = req.query;

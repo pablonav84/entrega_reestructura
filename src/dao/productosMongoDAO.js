@@ -7,7 +7,6 @@ export class ProductsManager{
         return await productsModelo.find().lean()
 }
 async getProductById(id){
-
   return await productsModelo.findById(id).lean()
 }
 async getProductByCode(code){
