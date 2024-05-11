@@ -3,6 +3,8 @@ import { passportCall } from '../utils.js';
 import { auth } from '../middleware/auth.js';
 import { rolModelo } from '../dao/models/rolModelo.js';
 import { productsModelo } from '../dao/models/productosModelo.js';
+import { usuarioModelo } from '../dao/models/usuariosModelo.js';
+
 
 export const router = Router();
 
@@ -10,17 +12,17 @@ router.get('/', (req, res) => {
   res.status(200).render('login');
 })
 
-router.get('/home', passportCall("jwt", {session:false}), async (req,res)=>{
+router.get('/home', passportCall("jwt", {session:false}), async (req, res) => {
   try {
-    const rol = await rolModelo.findById(req.user.rol);
-
-    res.status(200).render('home', {usuario: req.user, rol:rol.descrip});
+    
+      const rol = await rolModelo.findById(req.user.rol);
+      res.status(200).render('home', { usuario: req.user, rol: rol.descrip });
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Error al cargar la página de inicio' });
   }
 });
-
 
 router.get("/productos", async (req, res) => {
   let { pagina, limit, sort } = req.query;

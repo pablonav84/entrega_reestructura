@@ -61,11 +61,9 @@ router.post('/login', passportCall("login"), async(req,res)=>{
 });
 
 router.get('/logout', (req, res) => {
-  
-  // Elimina la cookie de autenticación
+
   res.clearCookie('coderCookie');
 
-  // Envía una respuesta al cliente
   res.send('<script>alert("Logout exitoso"); window.location.href="/?mensaje=Logout exitoso";</script>');
 });
 

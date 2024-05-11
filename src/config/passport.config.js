@@ -31,8 +31,13 @@ export const initPassport=()=>{
             },
             async (contenidoToken, done)=>{
                 try {
+                    if (!contenidoToken) {
+                        // Si no hay token de autenticación, devolver un mensaje de error
+                        return done(null, false, { message: "Debes iniciar sesión para acceder a esta página" });
+                      }
                     return done(null, contenidoToken)
                 } catch (error) {
+                    console.log(error)
                     return done(error)
                 }
             }
