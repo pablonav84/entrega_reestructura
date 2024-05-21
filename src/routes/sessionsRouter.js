@@ -27,7 +27,9 @@ router.get('/current', passportCall("jwt"), auth(["usuario"]), async(req,res)=>{
 router.get("/usuarios", async(req, res)=>{
     try {
         let usuarios = await usuarioModelo.find().populate("rol").populate("cart").lean();
+        console.log(usuarios)
         res.setHeader('Content-Type', 'application/json');
+        console.log({usuarios})
         return res.status(200).json({ usuarios });
       } catch (error) {
         res.status(500).json({ mensaje: 'Error al obtener los usuarios' });

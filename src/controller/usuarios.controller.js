@@ -7,7 +7,6 @@ export default class UsuariosController{
     static getUsuarios=async(req,res)=>{
 
         let usuarios=await usuariosService.getAllUsuarios()
-        //let usuarios=await usuariosDAO.getAll()
 
         res.setHeader('Content-Type','application/json')
         res.status(200).json({usuarios})

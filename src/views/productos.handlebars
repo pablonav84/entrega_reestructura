@@ -1,11 +1,13 @@
 <h2>Productos</h2>
 <hr>
-
+<h3 data-carrito="{{usuario.cart}}" id="h3Usuario">Usuario conectado: {{usuario.nombre}}</h3>
 <ul>
     {{#each productos}}
   	<ul>
     <li>Marca: {{title}} - Detalle:{{description}} - id:{{code}}</li>
     <a href="/productos/{{id}}">Ver Detalles</a>
+    <br>
+    <button onclick="agregar('{{_id}}')">Agregar a carrito</button>
     <br><br>
   	</ul>
   {{/each}}
@@ -53,3 +55,5 @@
 <br>
 <br>
 <br>
+
+<script src="/js/productos.js"></script>

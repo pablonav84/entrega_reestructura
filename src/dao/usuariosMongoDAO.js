@@ -3,7 +3,7 @@ import { usuarioModelo } from "./models/usuariosModelo.js";
 export class UsuariosManager{
 
     async getAll(filtro={}){
-        return await usuarioModelo.find(filtro).lean() 
+        return await usuarioModelo.find(filtro).populate('cart').populate('rol').lean() 
     }
 
     async getBy(filtro){   // {email}

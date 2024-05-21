@@ -6,7 +6,7 @@ import { generaHash } from "../utils.js"
 import { rolModelo } from "../dao/models/rolModelo.js"
 import { usuarioModelo } from "../dao/models/usuariosModelo.js"
 import { UsuariosManager } from "../dao/usuariosMongoDAO.js"
-import { Cart } from "../dao/models/cartModelo.js"
+import Cart from "../dao/models/cartModelo.js"
 import { config } from "./config.js"
 import github from "passport-github2"
 

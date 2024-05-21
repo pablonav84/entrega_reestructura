@@ -22,7 +22,9 @@ router.get('/home', passportCall("jwt", {session:false}), async (req,res)=>{
 });
 
 
-router.get("/productos", async (req, res) => {
+router.get("/productos", passportCall("jwt", {session:false}), async (req, res) => {
+  
+  let usuario=req.user;
   let { pagina, limit, sort } = req.query;
   if (!pagina) {
     pagina = 1;
@@ -56,6 +58,7 @@ router.get("/productos", async (req, res) => {
     .status(200)
     .render("productos", {
       productos,
+      usuario,
       totalPages,
       prevPage,
       nextPage,
@@ -76,3 +79,4 @@ router.get("/registro", (req, res) => {
 
   return res.status(200).render("registro");
 })
+

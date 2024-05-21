@@ -13,7 +13,7 @@ export const usuarioModelo=mongoose.model(
             password: String, 
             cart: { 
                 type: mongoose.Types.ObjectId,
-                ref: 'Cart'
+                ref: 'carts'
             },
             rol: {
                 type: mongoose.Types.ObjectId,

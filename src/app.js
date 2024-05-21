@@ -7,6 +7,7 @@ import path from "path";
 import { initPassport } from './config/passport.config.js';
 import { UsuariosRouter } from "./routes/router/usuariosRouter.js";
 import { router as sessionsRouter } from './routes/sessionsRouter.js';
+import { router as carritosRouter } from './routes/carritosRouter.js';
 import { ProductosRouter } from './routes/router/productosRouter.js';
 import { config } from './config/config.js';
 import __dirname from "./utils.js";
@@ -40,6 +41,7 @@ app.use(cookieParser("CoderCoder123"))
 app.use("/", vistasRouter)
 app.use("/api/usuarios", usuariosRouter.getRouter())
 app.use("/api/productos", productosRouter.getRouter())
+app.use("/api/carritos", carritosRouter)
 app.use("/api/sessions", sessionsRouter)
 
 const server = app.listen(PORT, () => {
